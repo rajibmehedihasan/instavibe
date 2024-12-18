@@ -15,6 +15,8 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
+import { signIn } from "@/auth";
+import { signInAction } from "./action";
 
 const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -90,13 +92,13 @@ export default function LoginPage() {
                     <Button
                         className="w-1/2"
                         variant="outline"
-                        onClick={() => console.log("google")}
+                        onClick={() => signInAction("google")}
                     >
                         <FcGoogle /> {/* Google icon */}
                         <span>Login with Google</span>
                     </Button>
 
-                    <Button variant="outline" onClick={() => console.log("facebook")}>
+                    <Button variant="outline" onClick={() => signInAction("facebook")}>
                         <FaFacebook /> {/* Facebook icon */}
                         <span>Login with Facebook</span>
                     </Button>
