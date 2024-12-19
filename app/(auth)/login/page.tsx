@@ -15,7 +15,6 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
-import { signIn } from "@/auth";
 import { signInAction } from "./action";
 
 const loginSchema = z.object({
