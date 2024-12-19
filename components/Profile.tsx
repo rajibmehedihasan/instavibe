@@ -9,13 +9,9 @@ import {
     DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { logout } from "@/app/(auth)/actions";
 
 export default function Profile({ session }: any) {
-    const handleLogout = () => {
-        console.log("Logging out...");
-        // Add actual logout logic here
-    };
-
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -38,7 +34,7 @@ export default function Profile({ session }: any) {
                         View Profile
                     </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     );

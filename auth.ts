@@ -1,9 +1,54 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import Facebook from "next-auth/providers/facebook";
+import Credentials from "next-auth/providers/credentials";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "@/prisma";
+import { hashPassword } from "@/utils/helper";
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+    adapter: PrismaAdapter(prisma),
+    session: { strategy: "jwt" },
     providers: [
+        Credentials({
+            credentials: {
+                email: {},
+                password: {},
+            },
+
+            authorize: async (credentials) => {
+                if (!credentials || !credentials.email || !credentials.password) {
+                    return null;
+                }
+
+                const email = credentials.email as string;
+                const hash = hashPassword(credentials.password);
+
+                let user = await prisma.user.findUnique({
+                    where: {
+                        email,
+                    },
+                });
+
+                if (!user) {
+                    user = await prisma.user.create({
+                        data: {
+                            email,
+                            hashedPassword: hash,
+                        },
+                    });
+                } else {
+                    const isMatch = bcrypt.compareSync(
+                        credentials.password as string,
+                        user.hashedPassword
+                    );
+                    if (!isMatch) {
+                        throw new Error("Incorrect password.");
+                    }
+                }
+
+                return user;
+            },
+        }),
         Google({
             authorization: {
                 params: {
@@ -13,14 +58,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
                 },
             },
         }),
-        Facebook,
     ],
-    callbacks: {
-        // async signIn({ account, profile }) {
-        //     // if (account.provider === "google") {
-        //     //     return profile.email_verified && profile.email.endsWith("@example.com");
-        //     // }
-        //     // return true; // Do different verification for other providers that don't have `email_verified`
-        // },
-    },
+    callbacks: {},
 });

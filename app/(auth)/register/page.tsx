@@ -15,7 +15,7 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
-import { Eye, EyeOff } from "lucide-react"; // Icon for toggle button
+import { Eye, EyeOff } from "lucide-react";
 
 const registrationSchema = z
     .object({

@@ -15,7 +15,7 @@ import {
     FormControl,
     FormMessage,
 } from "@/components/ui/form";
-import { signInAction } from "./action";
+import { login } from "../actions";
 
 const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -88,16 +88,12 @@ export default function LoginPage() {
 
                 {/* OAuth Buttons */}
                 <div className="flex gap-5 mt-5">
-                    <Button
-                        className="w-1/2"
-                        variant="outline"
-                        onClick={() => signInAction("google")}
-                    >
+                    <Button className="w-1/2" variant="outline" onClick={() => login("google")}>
                         <FcGoogle /> {/* Google icon */}
                         <span>Login with Google</span>
                     </Button>
 
-                    <Button variant="outline" onClick={() => signInAction("facebook")}>
+                    <Button variant="outline" onClick={() => login("facebook")}>
                         <FaFacebook /> {/* Facebook icon */}
                         <span>Login with Facebook</span>
                     </Button>
